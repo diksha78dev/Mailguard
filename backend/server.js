@@ -185,19 +185,19 @@ app.use(errorHandler);
 // Get port from environment variables or use default 5000
 const PORT = process.env.PORT || 5000;
 
-// Start the server and listen on specified port
-app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
-  
-  // Initialize automatic retraining scheduler
-  // Runs model retraining based on schedule (default: 2 AM daily)
-  // Set RETRAIN_SCHEDULE env variable to customize (e.g., '*/1 * * * *' for testing)
-  // TEMPORARILY DISABLED - Causing server crash
-  // startScheduler();
-  
-  // Initialize nightly email scan and cleanup job
-  // Automatically fetches, classifies, and deletes phishing emails
-  // Runs every night at 2 AM
-  // TEMPORARILY DISABLED - Causing server crash
-  // startScanJob();
-});
+// Start the server and listen on specified port only if run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+    
+    // Initialize automatic retraining scheduler
+    // TEMPORARILY DISABLED - Causing server crash
+    // startScheduler();
+    
+    // Initialize nightly email scan and cleanup job
+    // TEMPORARILY DISABLED - Causing server crash
+    // startScanJob();
+  });
+}
+
+module.exports = app;
